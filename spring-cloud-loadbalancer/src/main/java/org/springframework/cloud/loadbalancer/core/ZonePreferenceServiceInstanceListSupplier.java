@@ -24,6 +24,7 @@ import reactor.core.publisher.Flux;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.loadbalancer.config.LoadBalancerZoneConfig;
+import org.springframework.cloud.client.loadbalancer.Request;
 
 /**
  * An implementation of {@link ServiceInstanceListSupplier} that filters instances
@@ -52,6 +53,11 @@ public class ZonePreferenceServiceInstanceListSupplier extends DelegatingService
 	@Override
 	public Flux<List<ServiceInstance>> get() {
 		return getDelegate().get().map(this::filteredByZone);
+	}
+	
+	@Override
+	public Flux<List<ServiceInstance>> get(Request request) {
+		return getDelegate().get(request).map(this::filteredByZone);
 	}
 
 	private List<ServiceInstance> filteredByZone(List<ServiceInstance> serviceInstances) {
